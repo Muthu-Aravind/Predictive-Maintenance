@@ -1,0 +1,18 @@
+{
+  "source_file": "data/engine_data.csv",
+  "rows_total": 19535,
+  "train_rows": 15628,
+  "test_rows": 3907,
+  "test_size": 0.2,
+  "random_state": 42,
+  "stratified": true,
+  "features": [
+    "Engine rpm",
+    "Lub oil pressure",
+    "Fuel pressure",
+    "Coolant pressure",
+    "lub oil temp",
+    "Coolant temp"
+  ],
+  "target": "Engine Condition"
+}

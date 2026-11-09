@@ -1,0 +1,99 @@
+name: Predictive Maintenance ML Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "artifacts/**"
+      - "reports/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: predictive-maintenance-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  prepare-data:
+    name: Validate data and create split artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Validate registered dataset
+        run: python src/validate_data.py
+
+      - name: Prepare stratified train and test datasets
+        run: python src/prepare_data.py
+
+      - name: Upload train/test workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: engine-train-test-split
+          path: artifacts/train_test_workflow_artifact.zip
+          if-no-files-found: error
+          retention-days: 7
+
+  train-evaluate-register:
+    name: Tune, evaluate and register model
+    needs: prepare-data
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download train/test workflow artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: engine-train-test-split
+          path: artifacts
+
+      - name: Tune models, evaluate selected model and save artifacts
+        run: python src/train_model.py
+
+      - name: Commit refreshed model and experiment artifacts to main
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add artifacts/best_model.joblib
+          git add artifacts/model_metadata.json
+          git add artifacts/experiment_log.csv artifacts/experiment_log.json
+          git add artifacts/baseline_cv_metrics.csv
+          git add artifacts/holdout_test_metrics.json artifacts/best_params.json
+          git add artifacts/feature_importance.csv
+          git add artifacts/tuning_detail_*.csv
+          git add reports/figures/*.png
+          if git diff --cached --quiet; then
+            echo "No model artifact changes to commit."
+          else
+            git commit -m "chore(ml): register refreshed model [skip ci]"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi

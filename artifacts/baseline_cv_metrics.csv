@@ -1,0 +1,2 @@
+model,cv_recall_class1_mean,cv_recall_class1_std,cv_f1_class1_mean,cv_roc_auc_mean
+DummyClassifier (most_frequent),1.0,0.0,0.7734086785431872,0.5

@@ -1,0 +1,78 @@
+{
+  "model_name": "Gradient Boosting",
+  "features": [
+    "Engine rpm",
+    "Lub oil pressure",
+    "Fuel pressure",
+    "Coolant pressure",
+    "lub oil temp",
+    "Coolant temp"
+  ],
+  "target": "Engine Condition",
+  "classes": [
+    0,
+    1
+  ],
+  "target_class_semantics": "Dataset documentation does not define which class means failure.",
+  "selection_metric": "Three-fold stratified CV recall for numeric class 1; F1 tie-break",
+  "random_state": 42,
+  "cv_folds": 3,
+  "search_iterations_per_candidate": 3,
+  "training_rows": 15628,
+  "test_rows": 3907,
+  "split_metadata": {
+    "source_file": "data/engine_data.csv",
+    "rows_total": 19535,
+    "train_rows": 15628,
+    "test_rows": 3907,
+    "test_size": 0.2,
+    "random_state": 42,
+    "stratified": true,
+    "features": [
+      "Engine rpm",
+      "Lub oil pressure",
+      "Fuel pressure",
+      "Coolant pressure",
+      "lub oil temp",
+      "Coolant temp"
+    ],
+    "target": "Engine Condition"
+  },
+  "best_parameters": {
+    "subsample": 1.0,
+    "n_estimators": 35,
+    "min_samples_leaf": 1,
+    "max_depth": 1,
+    "learning_rate": 0.08
+  },
+  "test_metrics": {
+    "selected_model": "Gradient Boosting",
+    "test_rows": 3907,
+    "test_accuracy": 0.6542103916048119,
+    "test_balanced_accuracy": 0.5483901352200939,
+    "test_precision_class0": 0.64576802507837,
+    "test_recall_class0": 0.14265927977839335,
+    "test_f1_class0": 0.23369256948383438,
+    "test_precision_class1": 0.6549609810479375,
+    "test_recall_class1": 0.9541209906617946,
+    "test_f1_class1": 0.776731118823335,
+    "test_macro_f1": 0.5052118441535847,
+    "test_roc_auc": 0.6844665312553775,
+    "test_average_precision_class1": 0.7837449148095961,
+    "confusion_matrix_labels_0_1": [
+      [
+        206,
+        1238
+      ],
+      [
+        113,
+        2350
+      ]
+    ]
+  },
+  "library_versions": {
+    "scikit_learn": "1.8.0",
+    "pandas": "2.2.3",
+    "numpy": "2.3.5"
+  }
+}

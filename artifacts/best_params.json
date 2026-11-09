@@ -1,0 +1,7 @@
+{
+  "subsample": 1.0,
+  "n_estimators": 35,
+  "min_samples_leaf": 1,
+  "max_depth": 1,
+  "learning_rate": 0.08
+}

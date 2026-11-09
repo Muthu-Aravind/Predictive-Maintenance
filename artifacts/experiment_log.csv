@@ -1,0 +1,4 @@
+model,best_cv_recall_class1,cv_recall_std,best_cv_f1_class1,best_cv_roc_auc,best_params,search_iterations,cv_folds,selection_rule
+Gradient Boosting,0.9496636058413377,0.010628383132685569,0.7749335175413762,0.6876742290818175,"{""learning_rate"": 0.08, ""max_depth"": 1, ""min_samples_leaf"": 1, ""n_estimators"": 35, ""subsample"": 1.0}",3,3,max mean recall_class1; tie-break max mean f1_class1
+Random Forest,0.7515712298486396,0.012216811131812446,0.7310202950700608,0.6762885871261389,"{""max_depth"": null, ""max_features"": ""sqrt"", ""min_samples_leaf"": 3, ""n_estimators"": 35}",3,3,max mean recall_class1; tie-break max mean f1_class1
+Extra Trees,0.6775911187245511,0.015352150438935059,0.7095878552983929,0.6925867331370478,"{""max_depth"": null, ""max_features"": ""sqrt"", ""min_samples_leaf"": 3, ""n_estimators"": 35}",3,3,max mean recall_class1; tie-break max mean f1_class1
